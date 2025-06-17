@@ -1,12 +1,11 @@
 <!-- Modal Backdrop -->
 <div
   class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-center items-center"
-  *ngIf="show"
 >
   <div class="bg-[#1f2235] p-8 rounded-xl w-full max-w-md shadow-xl text-white relative">
     <button
       (click)="close()"
-      class="absolute top-3 right-4 text-white text-2xl leading-none"
+      class="absolute top-3 right-4 text-white text-2xl leading-none cursor-pointer"
     >
       &times;
     </button>

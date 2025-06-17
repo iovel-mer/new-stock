@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
-import { LoginModal } from "../login-modal/login-modal";
+import { CommonModule } from '@angular/common';
+import { Component, inject  } from '@angular/core';
+import { AuthService } from '../../services/auth';
+
 
 @Component({
   selector: 'app-header',
-  imports: [LoginModal],
+   imports: [CommonModule],
   templateUrl: './header.html',
   styleUrl: './header.css'
+
 })
-export class Header {
-showLoginModal = false;
+export class HeaderComponent {
+  authService = inject(AuthService);
 
   openLogin() {
-    this.showLoginModal = true;
+    this.authService.openLogin();
   }
 
-  closeLogin() {
-    this.showLoginModal = false;
+  openRegister() {
+    this.authService.openRegister();
   }
 }
