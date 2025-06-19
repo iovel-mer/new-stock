@@ -2,9 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
-
-
-
+import { ClientService } from '../../services/client';
 
 
 @Component({
@@ -16,6 +14,7 @@ import { AuthService } from '../../services/auth';
 })
 export class LoginComponent {
   authService = inject(AuthService);
+  clientService = inject(ClientService);
   fb = inject(FormBuilder);
 
   form = this.fb.group({
@@ -25,8 +24,28 @@ export class LoginComponent {
 
    submit() {
     if (this.form.valid) {
-      console.log('Form data:', this.form.value);
-      // send to backend here later
+     const formValue = this.form.value;
+
+    const payload = {
+      emailOrUsername: formValue.email!,
+      password: formValue.password!,
+      twoFactorCode:null,
+      rememberMe:null
+    };
+
+    console.log('Login payload:', payload); 
+
+     this.clientService.login(payload).subscribe({
+      next: (res) => {
+        console.log('Login success:', res);
+        // Optionally save token, redirect user, etc.
+        window.location.href = 'https://salesvault.vc'; // Redirect after successful login
+      },
+      error: (err) => {
+        console.error('Login failed:', err);
+        // Show error message to user
+      }
+    });
     } else {
       this.form.markAllAsTouched(); // show errors
     }

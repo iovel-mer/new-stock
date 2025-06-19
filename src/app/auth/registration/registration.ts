@@ -3,6 +3,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { Country, CountryService } from '../../services/country';
+import { ClientService } from '../../services/client';
 
 @Component({
   selector: 'app-registration',
@@ -14,6 +15,7 @@ import { Country, CountryService } from '../../services/country';
 export class RegistrationComponent {
   countryService = inject(CountryService);
   authService = inject(AuthService);
+   clientService = inject(ClientService);
   fb = inject(FormBuilder);
   countries: Country[] = [];
 
@@ -40,14 +42,39 @@ export class RegistrationComponent {
       error: (err) => console.error('Failed to load countries', err),
     });
   }
-  submit() {
+ 
+  
+submit() {
     if (this.form.valid) {
-      console.log('Registration Data:', this.form.value);
-      // Later you can send this to the backend
+      const formValue = this.form.value;
+
+      const payload = {
+        firstName: formValue.firstname,
+        lastName: formValue.lastname,
+        email: formValue.email,
+        username: formValue.email, // Or a separate username field
+        password: formValue.password,
+        telephone: formValue.phone,
+        country: formValue.country,
+        language: formValue.language,
+        dateOfBirth: formValue.date,
+        source: window.location.hostname, // Automatically fills the current domain
+      };
+
+      this.clientService.createClient(payload).subscribe({
+        next: (res) => {
+          console.log('Client created successfully:', res);
+          
+        },
+        error: (err) => {
+          console.error('Error creating client:', err);
+        },
+      });
     } else {
-      this.form.markAllAsTouched(); // Mark all fields to show validation errors
+      this.form.markAllAsTouched(); // Show validation errors
     }
   }
+
 
   close() {
     this.authService.closeModals();
