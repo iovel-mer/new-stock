@@ -18,12 +18,13 @@ export class RegistrationComponent {
    clientService = inject(ClientService);
   fb = inject(FormBuilder);
   countries: Country[] = [];
+  successMessage: string | null = null;
+
 
   form = this.fb.group({
     firstname: ['', Validators.required],
     lastname: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    verifyEmail: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^[0-9]{9,15}$/)]],
     date: ['', Validators.required],
     country: [null, Validators.required],
@@ -52,19 +53,24 @@ submit() {
         firstName: formValue.firstname,
         lastName: formValue.lastname,
         email: formValue.email,
-        username: formValue.email, // Or a separate username field
+        username: formValue.email, 
         password: formValue.password,
         telephone: formValue.phone,
         country: formValue.country,
         language: formValue.language,
         dateOfBirth: formValue.date,
-        source: window.location.hostname, // Automatically fills the current domain
+        source: window.location.hostname, 
       };
 
       this.clientService.createClient(payload).subscribe({
         next: (res) => {
-          console.log('Client created successfully:', res);
-          
+          this.successMessage = '🎉 Registration successful! Redirecting to login...';
+          console.log(res);
+        console.log('Registered user info:', formValue);
+    setTimeout(() => {
+      this.authService.openLogin();
+      this.successMessage = null;
+    }, 2000);
         },
         error: (err) => {
           console.error('Error creating client:', err);

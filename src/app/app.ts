@@ -12,7 +12,7 @@ import { LoginComponent } from './auth/login/login';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Middle, CommonModule, HeaderComponent, RegistrationComponent,LoginComponent,CommonModule],
+  imports: [ Middle, CommonModule, HeaderComponent, RegistrationComponent,LoginComponent,CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

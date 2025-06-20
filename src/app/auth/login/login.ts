@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { ClientService } from '../../services/client';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,32 +21,38 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-   submit() {
+  submit() {
     if (this.form.valid) {
-     const formValue = this.form.value;
+      const formValue = this.form.value;
 
-    const payload = {
-      emailOrUsername: formValue.email!,
-      password: formValue.password!,
-      twoFactorCode:null,
-      rememberMe:null
-    };
+      const payload = {
+        emailOrUsername: formValue.email!,
+        password: formValue.password!,
+        twoFactorCode: null,
+        rememberMe: null
+      };
 
-    console.log('Login payload:', payload); 
+     
 
-     this.clientService.login(payload).subscribe({
-      next: (res) => {
-        console.log('Login success:', res);
-        // Optionally save token, redirect user, etc.
-        window.location.href = 'https://salesvault.vc'; // Redirect after successful login
-      },
-      error: (err) => {
-        console.error('Login failed:', err);
-        // Show error message to user
-      }
-    });
+      this.clientService.login(payload).subscribe({
+        next: (res) => {
+          const token = res;
+          console.log('Login response:', res);
+
+          if (token) {
+          
+              this.clientService.sendTokenToTrackingAPI(token)
+           
+          } else {
+            console.error('❌ No accessToken in response.');
+          }
+        },
+        error: (err) => {
+          console.error('❌ Login failed:', err);
+        }
+      });
     } else {
-      this.form.markAllAsTouched(); // show errors
+      this.form.markAllAsTouched();
     }
   }
 
@@ -55,4 +60,3 @@ export class LoginComponent {
     this.authService.closeModals();
   }
 }
-

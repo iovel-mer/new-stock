@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ClientService {
   private apiUrl = 'https://api.salesvault.vc/identity/api/clients/create-client-via-web';
-   private loginUrl = 'https://api.salesvault.vc/identity/api/auth/login';
+   private loginUrl = 'https://api.salesvault.vc/identity/api/auth/login-for-direct';
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +24,15 @@ export class ClientService {
     return this.http.post(this.loginUrl, payload);
   }
 
+sendTokenToTrackingAPI(token: string):void {
+  window.location.href = `https://salesvault.vc/auth/confirm/${token}`;
+
+  // return this.http.post(url, {}, {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // });
+}
 
 
 }

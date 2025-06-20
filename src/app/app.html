@@ -1,7 +1,9 @@
-<app-login *ngIf="authService.showLoginModal"></app-login>
-<app-registration *ngIf="authService.showRegisterModal"></app-registration>
-<app-header/>
-<app-middle>
 
+
+<app-login *ngIf="authService.showLoginModal$ | async"></app-login>
+<app-registration *ngIf="authService.showRegisterModal$ | async"></app-registration>
+
+<app-header></app-header>
+<app-middle></app-middle>
 
 

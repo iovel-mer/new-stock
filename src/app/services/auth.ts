@@ -1,24 +1,31 @@
+
+
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  showLoginModal = false;
-  showRegisterModal = false;
+  private showLoginModalSubject = new BehaviorSubject<boolean>(false);
+  private showRegisterModalSubject = new BehaviorSubject<boolean>(false);
+
+  showLoginModal$ = this.showLoginModalSubject.asObservable();
+  showRegisterModal$ = this.showRegisterModalSubject.asObservable();
 
   openLogin(): void {
-    this.showLoginModal = true;
-    
+    this.showLoginModalSubject.next(true);
+    this.showRegisterModalSubject.next(false);
   }
 
   openRegister(): void {
-    this.showRegisterModal = true;
-    this.showLoginModal = false;
+    console.log('Opening register modal');
+    this.showRegisterModalSubject.next(true);
+    this.showLoginModalSubject.next(false);
   }
 
   closeModals(): void {
-    this.showLoginModal = false;
-    this.showRegisterModal = false;
+    this.showLoginModalSubject.next(false);
+    this.showRegisterModalSubject.next(false);
   }
 }
